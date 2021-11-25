@@ -6,6 +6,10 @@ Requirements
 relevant details. DONE
 4.Handle the error case where no Marvel character is found
 that matches the user input. DONE
+5. Allow "starts with" or "fuzzy"
+searches. DONE
+6. Provide summaries of all comics that
+the character app
 
 """
 
@@ -14,17 +18,17 @@ import requests, json
 
 class request_handler:
 
-    _url_prefix = "https://gateway.marvel.com:443/v1/public/characters?"
+    __url_prefix = "https://gateway.marvel.com:443/v1/public/characters?"
 
 
     def api_request(self, requestType, charName, apiKey):
 
         if requestType == "GET":
-            self._url_suffix = "nameStartsWith={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(charName, apiKey)
-            self._url_full = self._url_prefix + self._url_suffix
+            self.__url_suffix = "nameStartsWith={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(charName, apiKey)
+            self.__url_full = self.__url_prefix + self.__url_suffix
             
-            print("Requesting from URL:" + self._url_full)
-            return requests.get(self._url_full)
+            print("Requesting from URL:" + self.__url_full)
+            return requests.get(self.__url_full)
             
         else:
             # do some stuff with POST / UPDATE / PUT etc. 
