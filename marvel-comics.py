@@ -1,9 +1,9 @@
 """
 Requirements
-1. Ask for input from the user.
-2. Make HTTP requests to the Marvel Comics API. Done
+1. Ask for input from the user. DONE
+2. Make HTTP requests to the Marvel Comics API. DONE
 3.Process the JSON response from the API and print out
-relevant details. Done
+relevant details. DONE
 4.Handle the error case where no Marvel character is found
 that matches the user input.
 
@@ -56,12 +56,19 @@ def get_results():
     return responseDict
 
 
+# take the dictionary from the Json repsonse and a category name
+# find the the category name as a slice of the results: list inside the dict. 
 def get_InfoCategory(category: str, responseDictionary):
 
     results = responseDictionary['data']['results']
+    count = responseDictionary['data']['count']
 
-    for result in results:
-        print (result[category])
+    if count != 0:
+        for result in results:
+            print (result[category])
+    else:
+        print("No results for {} found".format(category))
+  
 
 def main ():
   
