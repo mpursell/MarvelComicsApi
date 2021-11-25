@@ -5,7 +5,7 @@ Requirements
 3.Process the JSON response from the API and print out
 relevant details. DONE
 4.Handle the error case where no Marvel character is found
-that matches the user input.
+that matches the user input. DONE
 
 """
 
@@ -20,11 +20,11 @@ class request_handler:
     def api_request(self, requestType, charName, apiKey):
 
         if requestType == "GET":
-            self.url_suffix = "name={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(charName, apiKey)
-            self.url_full = self._url_prefix + self.url_suffix
+            self._url_suffix = "nameStartsWith={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(charName, apiKey)
+            self._url_full = self._url_prefix + self._url_suffix
             
-            print("Requesting from URL:" + self.url_full)
-            return requests.get(self.url_full)
+            print("Requesting from URL:" + self._url_full)
+            return requests.get(self._url_full)
             
         else:
             # do some stuff with POST / UPDATE / PUT etc. 
@@ -74,7 +74,7 @@ def main ():
   
     resultsDictionary = get_results()
     get_InfoCategory("name", resultsDictionary)
-    get_InfoCategory("description", resultsDictionary)
+    #get_InfoCategory("description", resultsDictionary)
 
 
 if __name__ == "__main__":
