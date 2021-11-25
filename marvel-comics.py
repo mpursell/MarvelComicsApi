@@ -42,7 +42,11 @@ def get_results():
 
     # instantiate a request_handler object and make the call
     api = request_handler()
+
     charName = input("Please enter a name of a Marvel character to look up: ")
+    if " " in charName:
+        charName = charName.replace(" ", "%20")
+
     publicKey = "0a73c0cb4d1aa96b73be3e13bc98261c"
     response = api.api_request("GET", charName, publicKey )
 
