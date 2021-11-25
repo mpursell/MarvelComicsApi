@@ -9,7 +9,7 @@ that matches the user input. DONE
 5. Allow "starts with" or "fuzzy"
 searches. DONE
 6. Provide summaries of all comics that
-the character app
+the character appears in. 
 
 """
 
@@ -18,14 +18,20 @@ import requests, json
 
 class request_handler:
 
-    __url_prefix = "https://gateway.marvel.com:443/v1/public/characters?"
+    def __init__(self, apiTarget, query):
+        self.apiTarget = apiTarget
+        self.query = query
 
+    #__url_prefix = "https://gateway.marvel.com:443/v1/public/characters?"
 
+    
     def api_request(self, requestType, charName, apiKey):
 
+        __url_prefix = "https://gateway.marvel.com:443/v1/public/{}".format(self.apiTarget)
+
         if requestType == "GET":
-            self.__url_suffix = "nameStartsWith={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(charName, apiKey)
-            self.__url_full = self.__url_prefix + self.__url_suffix
+            self.__url_suffix = "{}={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(self.query, charName, apiKey)
+            self.__url_full = __url_prefix + self.__url_suffix
             
             print("Requesting from URL:" + self.__url_full)
             return requests.get(self.__url_full)
@@ -42,17 +48,17 @@ class json_parser:
         return self.parsedContent
 
 
-def get_results():
+def get_character():
 
     # instantiate a request_handler object and make the call
-    api = request_handler()
+    characterLookup = request_handler("characters?", "nameStartsWith")
 
     charName = input("Please enter a name of a Marvel character to look up: ")
     if " " in charName:
         charName = charName.replace(" ", "%20")
 
     publicKey = "0a73c0cb4d1aa96b73be3e13bc98261c"
-    response = api.api_request("GET", charName, publicKey )
+    response = characterLookup.api_request("GET", charName, publicKey )
 
     # instantiate a json_parser object and produce a dictionary from the api response
     returnedJson = json_parser()
@@ -76,8 +82,8 @@ def get_InfoCategory(category: str, responseDictionary):
 
 def main ():
   
-    resultsDictionary = get_results()
-    get_InfoCategory("name", resultsDictionary)
+    characterResultsDictionary = get_character()
+    get_InfoCategory("name", characterResultsDictionary)
     #get_InfoCategory("description", resultsDictionary)
 
 
