@@ -50,14 +50,6 @@ def get_results():
     return responseDict
 
 
-def get_Name(responseDictionary):
-
-    results = responseDictionary['data']['results']
-
-    for result in results:
-        print (result['name'])
-
-
 def get_InfoCategory(category: str, responseDictionary):
 
     results = responseDictionary['data']['results']
