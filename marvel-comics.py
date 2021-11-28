@@ -21,6 +21,7 @@ class Request_handler:
     def __init__(self, apiTarget: str, query: str):
         self.apiTarget = apiTarget
         self.query = query
+        
     
     def api_request(self, requestType, charName, apiKey):
 
@@ -46,12 +47,7 @@ class Json_parser:
         self.parsedContent = json.loads(jsonContent)
         return self.parsedContent
 
-####################################
 class Character:
-
-    #name = ""
-    #description = ""
-    #comics = []
 
     def __init__(self, name, description):
 
