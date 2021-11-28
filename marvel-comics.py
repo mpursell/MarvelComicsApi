@@ -49,24 +49,17 @@ class Json_parser:
 ####################################
 class Character:
 
-    name = ""
-    description = ""
-    comics = []
+    #name = ""
+    #description = ""
+    #comics = []
 
-    def __init__(self, response_Dictionary):
-        self.response_Dictionary = response_Dictionary
+    def __init__(self, name, description):
 
+        self.name = name
+        self.description = description
 
-    def get_attributes(self):
+        
 
-        self.results = self.response_Dictionary['data']['results']
-        self.count = self.response_Dictionary['data']['count']
-
-        if self.count != 0:
-            for result in self.results:
-                print (result[self.name])
-        else:
-            print("No results for {} found".format(category))
 
 
 def get_character():
@@ -85,6 +78,8 @@ def get_character():
     returnedJson = Json_parser()
     responseDict = returnedJson.parse(response.text)
     return responseDict
+
+
 
 def get_comic(comicNumber):
 
@@ -107,10 +102,21 @@ def get_InfoCategory(category: str, responseDictionary):
   
 
 def main ():
-  
-    characterResultsDictionary = get_character()
-    get_InfoCategory("name", characterResultsDictionary)
-    #get_InfoCategory("description", resultsDictionary)
+    
+    character_Dictionary = get_character()
+
+    results = character_Dictionary['data']['results']
+    count = character_Dictionary['data']['count']
+
+    if count != 0:
+        for result in results:
+            name = result['name']
+            description = result['description']
+            char = Character(name, description)
+            print(char.name)
+            print(char.description)
+    else:
+        print("No results found")
 
 
 if __name__ == "__main__":
