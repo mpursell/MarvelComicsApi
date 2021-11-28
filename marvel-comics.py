@@ -16,17 +16,16 @@ the character appears in.
 
 import requests, json
 
-class request_handler:
+class Request_handler:
 
-    def __init__(self, apiTarget, query):
+    def __init__(self, apiTarget: str, query: str):
         self.apiTarget = apiTarget
         self.query = query
-
-    #__url_prefix = "https://gateway.marvel.com:443/v1/public/characters?"
-
     
     def api_request(self, requestType, charName, apiKey):
 
+        # url suffix and prefix generalised so that the api endpoint to query can be 
+        # given at the time the object is instantiated.  
         __url_prefix = "https://gateway.marvel.com:443/v1/public/{}".format(self.apiTarget)
 
         if requestType == "GET":
@@ -41,17 +40,39 @@ class request_handler:
             print("Please make a GET call")
 
 
-class json_parser:
+class Json_parser:
 
     def parse(self, jsonContent):
         self.parsedContent = json.loads(jsonContent)
         return self.parsedContent
 
+####################################
+class Character:
+
+    name = ""
+    description = ""
+    comics = []
+
+    def __init__(self, response_Dictionary):
+        self.response_Dictionary = response_Dictionary
+
+
+    def get_attributes(self):
+
+        self.results = self.response_Dictionary['data']['results']
+        self.count = self.response_Dictionary['data']['count']
+
+        if self.count != 0:
+            for result in self.results:
+                print (result[self.name])
+        else:
+            print("No results for {} found".format(category))
+
 
 def get_character():
 
     # instantiate a request_handler object and make the call
-    characterLookup = request_handler("characters?", "nameStartsWith")
+    characterLookup = Request_handler("characters?", "nameStartsWith")
 
     charName = input("Please enter a name of a Marvel character to look up: ")
     if " " in charName:
@@ -61,10 +82,15 @@ def get_character():
     response = characterLookup.api_request("GET", charName, publicKey )
 
     # instantiate a json_parser object and produce a dictionary from the api response
-    returnedJson = json_parser()
+    returnedJson = Json_parser()
     responseDict = returnedJson.parse(response.text)
     return responseDict
 
+def get_comic(comicNumber):
+
+    comicNumber = comicNumber + "?"
+    comicLookup = Request_handler("comics/", comicNumber )
+    
 
 # take the dictionary from the Json repsonse and a category name
 # find the the category name as a slice of the results: list inside the dict. 
