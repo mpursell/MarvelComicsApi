@@ -23,7 +23,7 @@ class Request_handler:
         self.query = query
         
     
-    def character_request(self, requestType, charName, apiKey):
+    def character_Request(self, requestType:str, charName: str, apiKey:str) -> json:
 
         # url suffix and prefix generalised so that the api endpoint to query can be 
         # given at the time the object is instantiated.  
@@ -33,21 +33,25 @@ class Request_handler:
             self.__url_suffix = "{}={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(self.query, charName, apiKey)
             self.__url_full = __url_prefix + self.__url_suffix
             
-            print("Requesting from URL:" + self.__url_full)
+            # debugging print statement
+            #print("Requesting from URL:" + self.__url_full)
+            
             return requests.get(self.__url_full)
             
         else:
             # do some stuff with POST / UPDATE / PUT etc. 
             print("Please make a GET call")
 
-    def comics_request(self, apiKey, comicURL):
+    def comics_Request(self, apiKey: str, comicURL: str) -> json:
 
         __url_prefix = comicURL
 
         self.__url_suffix = "?&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(apiKey)
         self.__url_full = __url_prefix + self.__url_suffix
         
-        print("Requesting from URL:" + self.__url_full)
+        # debugging print statement
+        #print("Requesting from URL:" + self.__url_full)
+        
         return requests.get(self.__url_full)
             
 
@@ -91,7 +95,7 @@ class Character:
 
 
 # method to get a dictionary of character attributes given a character name
-def get_character(public_key: str) -> dict:
+def get_Character(public_key: str) -> dict:
 
     # instantiate a request_handler object and make the call
     characterLookup = Request_handler("characters?", "nameStartsWith")
@@ -101,7 +105,7 @@ def get_character(public_key: str) -> dict:
         charName = charName.replace(" ", "%20")
 
     
-    response = characterLookup.character_request("GET", charName, public_key )
+    response = characterLookup.character_Request("GET", charName, public_key )
 
     # instantiate a json_parser object and produce a dictionary from the api response
     returnedJson = Json_parser()
@@ -110,11 +114,11 @@ def get_character(public_key: str) -> dict:
 
 
 # method to get a dictionary of comic attributes given a comic URL
-def get_comic(publicKey: str, comicURL: str) -> dict:
+def get_Comic(publicKey: str, comicURL: str) -> dict:
 
     # instantiate a request_handler object and make the api call
     comicLookup = Request_handler("comics/?", " ")
-    response  =  comicLookup.comics_request(publicKey, comicURL)
+    response  =  comicLookup.comics_Request(publicKey, comicURL)
 
     # instantiate a json_parser object and produce a dictionary from the api response
     returnedJson = Json_parser()
@@ -126,7 +130,7 @@ def get_comic(publicKey: str, comicURL: str) -> dict:
 def main ():
     
     publicKey = "0a73c0cb4d1aa96b73be3e13bc98261c"
-    characterDictionary = get_character(publicKey)
+    characterDictionary = get_Character(publicKey)
 
     # key into the dictionary to produce a list
     char_results = characterDictionary['data']['results']
@@ -152,7 +156,7 @@ def main ():
 
             for comic in char.comics:
                 comic_URL = comic['resourceURI']
-                comic_dict = get_comic(publicKey, comic_URL)
+                comic_dict = get_Comic(publicKey, comic_URL)
                 individualComicList = comic_dict['data']['results']
                 for individualComic in individualComicList:
                     print(individualComic['title'])
