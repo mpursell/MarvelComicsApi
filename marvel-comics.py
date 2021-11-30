@@ -13,8 +13,6 @@ the character appears in. DONE
 
 """
 
-
-from typing import List
 import requests, json
 
 # Class to handle requests to the Marvel API
@@ -128,11 +126,11 @@ def get_comic(publicKey: str, comicURL: str) -> dict:
 def main ():
     
     publicKey = "0a73c0cb4d1aa96b73be3e13bc98261c"
-    character_Dictionary = get_character(publicKey)
+    characterDictionary = get_character(publicKey)
 
     # key into the dictionary to produce a list
-    char_results = character_Dictionary['data']['results']
-    count = character_Dictionary['data']['count']
+    char_results = characterDictionary['data']['results']
+    count = characterDictionary['data']['count']
 
     # iterate over the list, which is a list of dicts
     if count != 0:
@@ -142,12 +140,13 @@ def main ():
             description = result['description']
             comics = result['comics']['items']
 
-            # instantiate a Character object and pass some attributes to it
+            # instantiate a Character object and set some attributes
             char = Character()
             char.name = name
             char.description = description
             char.comics = comics
 
+            # output to host as per the exercise requirements
             print(char.name)
             print(char.description)
 
