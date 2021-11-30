@@ -9,11 +9,12 @@ that matches the user input. DONE
 5. Allow "starts with" or "fuzzy"
 searches. DONE
 6. Provide summaries of all comics that
-the character appears in. 
+the character appears in. DONE
 
 """
 
 
+from typing import List
 import requests, json
 
 # Class to handle requests to the Marvel API
@@ -55,24 +56,44 @@ class Request_handler:
 # Class to parse the JSON returned from the API into a dictionary
 class Json_parser:
 
-    def parse(self, jsonContent):
+    def parse(self, jsonContent: json) -> dict:
         self.parsedContent = json.loads(jsonContent)
         return self.parsedContent
 
 # Class for a character creation
 class Character:
 
-    def __init__(self, name, description, comics):
+    def __init__(self):
 
-        self.name = name
-        self.description = description
-        self.comics = comics
+        @property
+        def name(self):
+            return self._name
+
+        @name.setter
+        def name(self, value: str):
+            self._name = self._value
+
+        @property
+        def description(self):
+            return self._description
+
+        @description.setter
+        def description(self, value: str):
+            self._description = self._value
+
+        @property 
+        def comics(self):
+            return self._comics
+
+        @comics.setter
+        def comics(self, value: list):
+            self._comics = self._value
 
         
 
 
 # method to get a dictionary of character attributes given a character name
-def get_character(public_key):
+def get_character(public_key: str) -> dict:
 
     # instantiate a request_handler object and make the call
     characterLookup = Request_handler("characters?", "nameStartsWith")
@@ -91,7 +112,7 @@ def get_character(public_key):
 
 
 # method to get a dictionary of comic attributes given a comic URL
-def get_comic(publicKey, comicURL):
+def get_comic(publicKey: str, comicURL: str) -> dict:
 
     # instantiate a request_handler object and make the api call
     comicLookup = Request_handler("comics/?", " ")
@@ -122,7 +143,11 @@ def main ():
             comics = result['comics']['items']
 
             # instantiate a Character object and pass some attributes to it
-            char = Character(name, description, comics)
+            char = Character()
+            char.name = name
+            char.description = description
+            char.comics = comics
+
             print(char.name)
             print(char.description)
 
