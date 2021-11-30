@@ -23,24 +23,21 @@ class Request_handler:
         self.query = query
         
     
-    def character_Request(self, requestType:str, charName: str, apiKey:str) -> json:
+    def character_Request(self, charName: str, apiKey:str) -> json:
 
         # url suffix and prefix generalised so that the api endpoint to query can be 
         # given at the time the object is instantiated.  
         __url_prefix = "https://gateway.marvel.com:443/v1/public/{}".format(self.apiTarget)
 
-        if requestType == "GET":
-            self.__url_suffix = "{}={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(self.query, charName, apiKey)
-            self.__url_full = __url_prefix + self.__url_suffix
-            
-            # debugging print statement
-            #print("Requesting from URL:" + self.__url_full)
-            
-            return requests.get(self.__url_full)
-            
-        else:
-            # do some stuff with POST / UPDATE / PUT etc. 
-            print("Please make a GET call")
+    
+        self.__url_suffix = "{}={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(self.query, charName, apiKey)
+        self.__url_full = __url_prefix + self.__url_suffix
+        
+        # debugging print statement
+        #print("Requesting from URL:" + self.__url_full)
+        
+        return requests.get(self.__url_full)
+    
 
     def comics_Request(self, apiKey: str, comicURL: str) -> json:
 
@@ -105,7 +102,7 @@ def get_Character(public_key: str) -> dict:
         charName = charName.replace(" ", "%20")
 
     
-    response = characterLookup.character_Request("GET", charName, public_key )
+    response = characterLookup.character_Request(charName, public_key )
 
     # instantiate a json_parser object and produce a dictionary from the api response
     returnedJson = Json_parser()
