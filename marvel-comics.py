@@ -13,7 +13,8 @@ the character appears in. DONE
 
 """
 
-import requests, json
+import requests 
+import json
 
 # Class to handle requests to the Marvel API
 class Request_handler:
@@ -27,29 +28,29 @@ class Request_handler:
 
         # url suffix and prefix generalised so that the api endpoint to query can be 
         # given at the time the object is instantiated.  
-        __url_prefix = "https://gateway.marvel.com:443/v1/public/{}".format(self.apiTarget)
+        __urlPrefix = "https://gateway.marvel.com:443/v1/public/{}".format(self.apiTarget)
 
     
-        self.__url_suffix = "{}={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(self.query, charName, apiKey)
-        self.__url_full = __url_prefix + self.__url_suffix
+        self.__urlSuffix = "{}={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(self.query, charName, apiKey)
+        self.__urlFull = __urlPrefix + self.__urlSuffix
         
         # debugging print statement
-        #print("Requesting from URL:" + self.__url_full)
+        #print("Requesting from URL:" + self.__urlFull)
         
-        return requests.get(self.__url_full)
+        return requests.get(self.__urlFull)
     
 
     def comics_Request(self, apiKey: str, comicURL: str) -> json:
 
-        __url_prefix = comicURL
+        __urlPrefix = comicURL
 
-        self.__url_suffix = "?&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(apiKey)
-        self.__url_full = __url_prefix + self.__url_suffix
+        self.__urlSuffix = "?&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(apiKey)
+        self.__urlFull = __urlPrefix + self.__urlSuffix
         
         # debugging print statement
-        #print("Requesting from URL:" + self.__url_full)
+        #print("Requesting from URL:" + self.__urlFull)
         
-        return requests.get(self.__url_full)
+        return requests.get(self.__urlFull)
             
 
 # Class to parse the JSON returned from the API into a dictionary
