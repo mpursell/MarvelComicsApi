@@ -152,13 +152,17 @@ def main ():
             print(char.name)
             print(char.description)
 
+            # get the comic titles and summary / description
             for comic in char.comics:
                 comic_URL = comic['resourceURI']
                 comic_dict = get_Comic(publicKey, comic_URL)
                 individualComicList = comic_dict['data']['results']
                 for individualComic in individualComicList:
-                    print(individualComic['title'])
-                    if individualComic['description'] == "":
+                    if individualComic['title'] == "" or individualComic['title'] == None:
+                        print('No comic available')
+                    else:
+                        print(individualComic['title'])
+                    if individualComic['description'] == "" or individualComic['description'] == None:
                         print('No summary available for this comic')
                     else:
                         print(individualComic['description'])
