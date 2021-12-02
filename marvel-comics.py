@@ -76,7 +76,8 @@ class Json_parser:
         self.parsedContent = json.loads(jsonContent)
         return self.parsedContent
 
-# Class for a character creation
+
+# Class for character creation
 class Character:
 
     def __init__(self):
@@ -119,8 +120,7 @@ def get_Character(public_key: str) -> dict:
     charName = input("Please enter a name of a Marvel character to look up: ")
     if " " in charName:
         charName = charName.replace(" ", "%20")
-
-    
+   
     response = characterLookup.character_Request(charName, public_key )
 
     # instantiate a json_parser object and produce a dictionary from the api response
@@ -157,6 +157,7 @@ def main ():
     # iterate over the list, which is a list of dicts
     if count != 0:
         for result in char_results:
+
             # key into the dict as required
             name = result['name']
             description = result['description']
@@ -174,10 +175,12 @@ def main ():
 
             # get the comic titles and summary / description
             for comic in char.comics:
+
                 comic_URL = comic['resourceURI']
                 comic_dict = get_Comic(publicKey, comic_URL)
                 individualComicList = comic_dict['data']['results']
                 for individualComic in individualComicList:
+                    
                     if individualComic['title'] == "" or individualComic['title'] == None:
                         print('No comic available')
                     else:
