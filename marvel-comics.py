@@ -19,9 +19,25 @@ import json
 # Class to handle requests to the Marvel API
 class Request_handler:
 
-    def __init__(self, apiTarget: str, query: str):
-        self.apiTarget = apiTarget
-        self.query = query
+    def __init__(self):
+        
+        @property
+        def apiTarget(self):
+            return self._apiTarget
+
+        @apiTarget.setter
+        def apiTarget(self, value:str):
+            self._apiTarget = value
+
+        @property
+        def query(self):
+            return self._query
+
+        @query.setter
+        def query(self, value:str):
+            self._query = value
+            
+
         
     
     def character_Request(self, charName: str, apiKey:str) -> json:
@@ -96,7 +112,9 @@ class Character:
 def get_Character(public_key: str) -> dict:
 
     # instantiate a request_handler object and make the call
-    characterLookup = Request_handler("characters?", "nameStartsWith")
+    characterLookup = Request_handler()
+    characterLookup.apiTarget = "characters?"
+    characterLookup.query = "nameStartsWith"
 
     charName = input("Please enter a name of a Marvel character to look up: ")
     if " " in charName:
@@ -115,7 +133,9 @@ def get_Character(public_key: str) -> dict:
 def get_Comic(publicKey: str, comicURL: str) -> dict:
 
     # instantiate a request_handler object and make the api call
-    comicLookup = Request_handler("comics/?", " ")
+    comicLookup = Request_handler()
+    comicLookup.apiTarget = "comics/?"
+    comicLookup.query = ""
     response  =  comicLookup.comics_Request(publicKey, comicURL)
 
     # instantiate a json_parser object and produce a dictionary from the api response
