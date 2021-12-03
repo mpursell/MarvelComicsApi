@@ -1,17 +1,3 @@
-"""
-Requirements
-1. Ask for input from the user. DONE
-2. Make HTTP requests to the Marvel Comics API. DONE
-3.Process the JSON response from the API and print out
-relevant details. DONE
-4.Handle the error case where no Marvel character is found
-that matches the user input. DONE
-5. Allow "starts with" or "fuzzy"
-searches. DONE
-6. Provide summaries of all comics that
-the character appears in. DONE
-
-"""
 
 from abc import ABC, abstractmethod
 import requests 
@@ -22,7 +8,7 @@ import json
 class Request_handler(ABC):
 
     @abstractmethod
-    def make_Request(self):
+    def make_Request(self, target):
         pass
 
 # Class to handle requests to the Marvel API
