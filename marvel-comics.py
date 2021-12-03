@@ -22,7 +22,7 @@ import json
 class Request_handler(ABC):
 
     @abstractmethod
-    def make_Request(self, url):
+    def make_Request(self):
         pass
 
 # Class to handle requests to the Marvel API
