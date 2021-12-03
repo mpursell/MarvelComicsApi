@@ -13,11 +13,20 @@ the character appears in. DONE
 
 """
 
+from abc import ABC, abstractmethod
 import requests 
 import json
 
+# Abstract class to base subclass Api_request on
+# uneccesary for app, but testing out syntax and concept
+class Request_handler(ABC):
+
+    @abstractmethod
+    def make_Request(self, url):
+        pass
+
 # Class to handle requests to the Marvel API
-class Request_handler:
+class Api_request(Request_handler):
 
     def __init__(self):
 
@@ -85,7 +94,7 @@ def get_Character(publicKey: str) -> dict:
     url = urlPrefix + urlSuffix
 
     # instantiate a request_handler object and make the call
-    characterLookup = Request_handler()
+    characterLookup = Api_request()
     response = characterLookup.make_Request(url)
 
     # instantiate a json_parser object and produce a dictionary from the api response
@@ -107,7 +116,7 @@ def get_Comic(publicKey: str, comicURL: str) -> dict:
 
 
     # instantiate a request_handler object and make the api call
-    comicLookup = Request_handler()
+    comicLookup = Api_request()
     response = comicLookup.make_Request(url)
 
 
