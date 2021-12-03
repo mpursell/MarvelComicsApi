@@ -19,9 +19,23 @@ import json
 # Class to handle requests to the Marvel API
 class Request_handler:
 
-    def __init__(self, apiTarget: str, query: str):
-        self.apiTarget = apiTarget
-        self.query = query
+    def __init__(self):
+        
+        @property
+        def apiTarget(self):
+            return self._apiTarget
+
+        @apiTarget.setter
+        def apiTarget(self, value:str):
+            self._apiTarget = value
+
+        @property
+        def query(self):
+            return self._query
+
+        @query.setter
+        def query(self, value:str):
+            self._query = value
         
     
     def character_Request(self, charName: str, apiKey:str) -> json:
@@ -96,26 +110,33 @@ class Character:
 def get_Character(public_key: str) -> dict:
 
     # instantiate a request_handler object and make the call
-    characterLookup = Request_handler("characters?", "nameStartsWith")
+    characterLookup = Request_handler()
+    characterLookup.apiTarget = "characters?"
+    characterLookup.query = "nameStartsWith"
 
     charName = input("Please enter a name of a Marvel character to look up: ")
     if " " in charName:
         charName = charName.replace(" ", "%20")
 
+    # capitalise the first letter of the string
+    charName = charName[0].upper() + charName[1:]
     
     response = characterLookup.character_Request(charName, public_key )
 
     # instantiate a json_parser object and produce a dictionary from the api response
     returnedJson = Json_parser()
     responseDict = returnedJson.parse(response.text)
-    return responseDict
+    if len(responseDict) == 0:
+        print("get_character - nothing in the response body")
+    else:
+        return responseDict
 
 
 # method to get a dictionary of comic attributes given a comic URL
 def get_Comic(publicKey: str, comicURL: str) -> dict:
 
     # instantiate a request_handler object and make the api call
-    comicLookup = Request_handler("comics/?", " ")
+    comicLookup = Request_handler()
     response  =  comicLookup.comics_Request(publicKey, comicURL)
 
     # instantiate a json_parser object and produce a dictionary from the api response
@@ -156,16 +177,24 @@ def main ():
             for comic in char.comics:
                 comic_URL = comic['resourceURI']
                 comic_dict = get_Comic(publicKey, comic_URL)
-                individualComicList = comic_dict['data']['results']
-                for individualComic in individualComicList:
-                    if individualComic['title'] == "" or individualComic['title'] == None:
-                        print('No comic available')
-                    else:
-                        print(individualComic['title'])
-                    if individualComic['description'] == "" or individualComic['description'] == None:
-                        print('No summary available for this comic')
-                    else:
-                        print(individualComic['description'])
+
+                try:
+                    individualComicList = comic_dict['data']['results']
+                
+
+                    for individualComic in individualComicList:
+                        if individualComic['title'] == "" or individualComic['title'] == None:
+                            print('No comic available')
+                        else:
+                            print(individualComic['title'])
+                        if individualComic['description'] == "" or individualComic['description'] == None:
+                            print('No summary available for this comic')
+                        else:
+                            print(individualComic['description'])
+
+                except TypeError:
+                    # will throw a TypeError if the repsonse body is empty for the given comic
+                    continue
     else:   
         print("No results found")
 
