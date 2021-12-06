@@ -1,7 +1,14 @@
+"""
+Requires a .env with API_KEY and API_HASH values set
+"""
 
 from abc import ABC, abstractmethod
+from dotenv import load_dotenv
 import requests 
 import json
+import os
+
+load_dotenv()
 
 # Abstract class to base subclass Api_request on
 # uneccesary for app, but testing out syntax and concept
@@ -66,7 +73,7 @@ class Character:
         
 
 # function to get a dictionary of character attributes given a character name
-def get_Character(publicKey: str) -> dict:
+def get_Character(publicKey: str, hash:str) -> dict:
 
     charName = input("Please enter a name of a Marvel character to look up: ")
     if " " in charName:
@@ -76,7 +83,7 @@ def get_Character(publicKey: str) -> dict:
     charNameFormatted = charName[0].upper() + charName[1:]
 
     urlPrefix = "https://gateway.marvel.com:443/v1/public/characters?nameStartsWith"
-    urlSuffix = "={}&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(charNameFormatted, publicKey)
+    urlSuffix = "={}&ts=1&apikey={}&hash={}".format(charNameFormatted, publicKey, hash)
     url = urlPrefix + urlSuffix
 
     # instantiate a request_handler object and make the call
@@ -94,10 +101,10 @@ def get_Character(publicKey: str) -> dict:
 
 
 # function to get a dictionary of comic attributes given a comic URL
-def get_Comic(publicKey: str, comicURL: str) -> dict:
+def get_Comic(publicKey: str, comicURL: str, hash:str) -> dict:
 
     urlPrefix = comicURL
-    urlSuffix = "?&ts=1&apikey={}&hash=3a0a5532ff049374f793672544269edf".format(publicKey)
+    urlSuffix = "?&ts=1&apikey={}&hash={}".format(publicKey, hash)
     url = urlPrefix + urlSuffix
 
 
@@ -115,8 +122,9 @@ def get_Comic(publicKey: str, comicURL: str) -> dict:
 
 def main ():
     
-    publicKey = "0a73c0cb4d1aa96b73be3e13bc98261c"
-    characterDictionary = get_Character(publicKey)
+    publicKey = os.environ.get('API_KEY')
+    apiKeyHash = os.environ.get('API_HASH')
+    characterDictionary = get_Character(publicKey, apiKeyHash)
 
     try:
         # key into the dictionary to produce a list
@@ -148,7 +156,7 @@ def main ():
             # get the comic titles and summary / description
             for comic in char.comics:
                 comic_URL = comic['resourceURI']
-                comic_dict = get_Comic(publicKey, comic_URL)
+                comic_dict = get_Comic(publicKey, comic_URL, apiKeyHash)
 
                 try:
                     individualComicList = comic_dict['data']['results']
