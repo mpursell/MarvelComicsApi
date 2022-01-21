@@ -21,20 +21,11 @@ class Request_handler(ABC):
 # Class to handle requests to the Marvel API
 class Api_request(Request_handler):
 
-    def __init__(self):
-
-        @property
-        def url(self):
-            return self._url
-        
-        @url.setter
-        def url(self, value:str):
-            return self._url
-
     def make_Request(self, url: str) -> json:
         return requests.get(url)
     
 # Class to parse the JSON returned from the API into a dictionary
+# could have used the requests.json() method but practicing classes
 class Json_parser:
 
     def parse(self, jsonContent: json) -> dict:
@@ -118,7 +109,6 @@ def get_Comic(publicKey: str, comicURL: str, hash:str) -> dict:
     responseDict = returnedJson.parse(response.text)
     return responseDict
     
-
 
 def main ():
     
